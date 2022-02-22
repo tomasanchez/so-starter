@@ -10,6 +10,10 @@ CFLAGS = -Wall -Wextra -g3
 TCFLAGS = -Wall -Wextra -Wshadow -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-variable -Wno-pragmas -O3 -g3
 # Used libraries
 LIBS =
+#Log Folder
+LOG_FOLDER=../log
+# Build Folder
+BUILD_FOLDER=../build
 # Include directory
 INCLUDE_DIRECTORY=./include/
 # Source directory
@@ -25,11 +29,11 @@ SOURCES = $(filter-out $(MAIN_FILE), $(shell find $(SOURCE_DIRECTORY) -name '*.c
 # Test cases files
 TESTS = $(shell find $(TEST_DIRECTORY) -name '*.c')
 # Application name
-APPNAME = a
+APPNAME = server
 # Output file name
-OUTPUT = build/$(APPNAME).out
+OUTPUT = $(BUILD_FOLDER)/$(APPNAME).out
 # Test Output file
-TEST_OUTPUT = build/$(APPNAME)_test.out
+TEST_OUTPUT = $(BUILD_FOLDER)/$(APPNAME)_test.out
 # Leaks log file
 LEAKS = log/leaks.log
 # Thread chek log file
@@ -45,12 +49,9 @@ install:
 # Install required libraries here.
 	@echo Installed
 
-dirs: 
-	@echo $(DIRS)
-
 compile:
-	@mkdir -p build
-	@echo Building...
+	@mkdir -p $(BUILD_FOLDER)
+	@echo Building module: [$(APPNAME)]... 
 	$(CC) $(CFLAGS) $(MAIN_FILE) $(SOURCES) $(INCLUDES) $(LIBS) -o $(OUTPUT)
 	@echo Build completed.
 
@@ -58,7 +59,7 @@ run: compile
 	./$(OUTPUT)
 
 test-build:
-	@mkdir -p build
+	@mkdir -p $(BUILD_FOLDER)
 	@echo Preparing tests...
 	$(CC) $(TCFLAGS) $(TESTS) $(SOURCES) $(INCLUDES) $(LIBS) -o $(TEST_OUTPUT)
 
