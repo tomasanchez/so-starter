@@ -1,0 +1,22 @@
+{
+  "name": "c-template",
+  "version": "1.1.0",
+  "description": "This is an ANCI-C Project Template ",
+  "main": "main.c",
+  "repository": "https://github.com/tomasanchez/c-project.git",
+  "author": "Tomas <tosanchez@frba.utn.edu.ar>",
+  "license": "MIT",
+  "scripts": {
+    "start": "make",
+    "clean": "make remove",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:major": "standard-version --release-as major"
+  },
+  "dependencies": {
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
+    "standard-version": "^9.2.0"
+  }
+}
