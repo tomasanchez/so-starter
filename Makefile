@@ -7,6 +7,8 @@ BUILD_DIR=build
 # Log directory
 LOG_DIR=log
 
+# Commons name
+COMMONS=so-commons-library
 
 # Modules directories - with their own makefile
 SERVER_DIR=server
@@ -25,14 +27,21 @@ TEST_ALL=$(foreach dir, $(DIRS), cd $(dir) && $(MAKE_TEST) && cd .. &&)
 # Todas las aplicaciones
 all: server
 
-.PHONY: server clean install test
+.PHONY: server clean install test install-commons
 
 compile: all
 
 install:
 	@echo Installing dependencies...
 # Install required libraries here.
-	@echo Installed
+	@echo "\nInstalling commons libraries...\n" 
+	@echo $(PWD)
+	rm -rf $(COMMONS)
+	git clone "https://github.com/sisoputnfrba/$(COMMONS).git" $(COMMONS)
+	cd $(COMMONS) && sudo make uninstall && sudo make install && cd ..
+	rm -rf $(COMMONS)
+	@echo "\nCommons installed\n" 
+	@echo Completed
 
 test:
 	$(TEST_ALL) true
@@ -42,3 +51,5 @@ server:
 
 clean:
 	rm -fr $(BUILD_DIR)
+
+	
