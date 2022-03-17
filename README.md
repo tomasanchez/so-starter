@@ -1,50 +1,311 @@
-# C Project Template
+# Advanced OS Assignment Making
 
-This folder contains a [`makefile`](./Makefile) which by defaults builds a `C` project using `GCC` which has the following structure
+- [Advanced OS Assignment Making](#advanced-os-assignment-making)
+  - [Intro](#intro)
+  - [Getting Started](#getting-started)
+    - [Environment Set Up](#environment-set-up)
+    - [Installation](#installation)
+    - [Openning the project](#openning-the-project)
+      - [Workflows](#workflows)
+      - [Makefile](#makefile)
+      - [Creating your Module](#creating-your-module)
+      - [Launching Options](#launching-options)
+  - [Going Further](#going-further)
+  - [Commiting](#commiting)
+    - [Commit types](#commit-types)
+  - [License](#license)
+  - [Credits](#credits)
 
-```
-project
-│   README.md
-│   Makefile
-│
-└───src
-│   │
-│   └─ app
-│   │  main.c
-│   │
-│   └─ folder
-│   |  *.c
-│   └─ another_folder
-│       *.c
-│
-└───include
-│   │
-│   └─ folder
-│       *.h
-│    *.h
-│
-└───log
-|   *.log
-|
-└───build
-    *.out
-```
+## Intro
 
-## Commands
+This Book is the Property of the ~~Half-Blood~~ Half-Coder Prince.
 
-- **all**: `make` rule runs `comipile` and `run`
-- **compile**: `make compile` compiles source files
-- **run**: `make run` executes the program
-- **leaks**: `make leaks` runs `compile` and runs the program in Valgrind, loggin the result in `log/leaks.log`
-- **threads**: `make threads` runs `compile` and runs the program in Valgrind with the tool `Hellgrind`
-- **clean**: deletes executable
-- **cleanLogs**: deletes the `log` folder
-- **remove**: runs `clean` and `cleanLogs`
+![Advances OS Making](https://static.wikia.nocookie.net/harrypotter/images/b/b9/Advanced_Potion_Making..png/revision/latest?cb=20210822080741)
+
+Inspired by Harry Potter's World, In which [Severus Snape makes importants anotattions]((https://harrypotter.fandom.com/wiki/Severus_Snape%27s_copy_of_Advanced_Potion-Making)) for improvements over a study book. I decided to develop my own implementation for the Operating System Course Assignment.
 
 ## Getting Started
 
-1. Create a repository from this template
-2. If you don't have yarn , install it.
+I will assume you already have a  **GitHub account**, a team with at least **Two and a Half** ~~Men~~ **Programmers**.
+
+### Environment Set Up
+
+- [Virtual Box](https://www.virtualbox.org/wiki/Downloads): download the latest version.
+- [Ubuntu Server v5.0.1](https://www.utnso.com.ar/recursos/maquinas-virtuales/): download the corresponding server version provided by UTNSO.
+- ~~Lubuntu v5.0.1 Recommended Enviroment~~  [Ubuntu](https://ubuntu.com/download/desktop) or [Mint](https://linuxmint.com/download.php): download latest 64-bit LTS version.
+- ~~Eclipse~~ VsCode: download the latest version.
+  - Install the following extensions
+    - [Git Lense](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens): git expansion.
+    - [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools): Language support, featuring IntelliSense and Debugging.
+    - [Doxygen Documentation Generator](https://marketplace.visualstudio.com/items?itemName=cschlosser.doxdocgen): for documentation.
+    - [C-Mantic](https://marketplace.visualstudio.com/items?itemName=tdennis4496.cmantic): Source actions, including refactoring and code generation.
+    - [Editor Config](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig): standarize your team formatting options.
+    - [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments): more human-friendly comments
+
+### Installation
+
+I highly recommend running your `Ubuntu` or `Mint` native. The server **must** be run on `VBox` or any other virtualization product.
+
+Once on your environment OS, you **must** install the following dependencies:
+
+With `CTRL` + `ALT` + `T` you can open a Terminal.
+
+Paste the following commands:
+
+```
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install git build-essential valgrind bison flex
+sudo snap install code --classic
+```
+
+This will install you the necessary tools to build your project, indluding git, make and valgrind.
+
+Now clear your terminal
+
+```
+clear
+```
+
+And  Clone the starter repository and install the dependencies (commons and readline). Paste the following commands:
+
+```
+mkdir -p Dev
+cd Dev
+git clone https://github.com/tomasanchez/so-starter.git
+cd so-starter
+sudo make install
+```
+
+With this you are all set.
+
+### Openning the project
+
+
+```
+cd Dev/so-starter
+code .
+```
+
+This should open `VsCode` in the `so-start` directory.
+
+Run
+
+```
+make test
+```
+
+If you obtain
+
+```
+RESULTS: X tests (X ok, 0 failed, 0 skipped) ran in Y ms
+Tests completed.
+```
+
+Then everything is working correctly.
+
+There too many directories! However, it is easy to understand.
+
+1. `.github`: [Workflows](#workflows) actions for Continuous Integration.
+2. `.vscode`: [Launching options](#launching-options) and other `Code` configurations.
+3. `build`: Executables files will be placed here.
+4. `config`: Configuration directory container, all `.cfg` files should be placed in here.
+5. `lib`: Shared library module, for sharing functionalities among modules.
+6. `shard`: All Shared objects (`*.o` files) are stored here.
+7. `client`: a module implementation example  of the TP0 client.
+8. `server`: a module implementation example of the TP0 server.
+
+
+#### Workflows 
+
+GitHub Actions jobs can be automatically triggered, where they run, and how they can interact with the code in your repository. This starter has a job for testing the project. Each module will execute defined test.
+
+This workflow will allow you to use Continuous Integration in your project, when `push` or `pull request` on main branch.
+
+If all test passed, you will see a :heavy_check_mark: in the top. Otherwise, a :x: will be displayed. So when pull request are created, your team can easily `approve/reject` the pull request, checking not only merge conflicts but test passed.
+
+
+#### Makefile
+
+The `Makefile` in the root directory is used to build a project with different modules.
+
+The following commands are available
+
+1. make install
+2. make test
+3. make YOUR_MODULE_NAME
+
+You should modifythe following rules, and add new ones as explained below:
+
+This starter includes two modules, server and client. Which is a solution for [UTN FRBA OS-Course TP0](https://docs.google.com/document/d/1wBsTIlPc_4UKyHRUVxoY3VIepBO_tMq9CNqz3wGoGlA/edit).
+
+This snippet displays the modules directories names.
+
+```shell
+# Modules directories - with their own makefile
+SERVER_DIR=server
+CLIENT_DIR=client
+```
+Then below:
+
+```shell
+.PHONY: server client clean install test install-commons
+
+# Directories list
+DIRS = $(SERVER_DIR) $(CLIENT_DIR)
+
+client:
+	cd $(CLIENT_DIR) && $(MAKE_COMPILE)
+
+server:
+	cd $(SERVER_DIR) && $(MAKE_COMPILE)
+```
+
+When creating your own module you **MUST** declare it in this `Makefile`.
+
+suppose, you add a `Memory` module, in a directory `/memory`, then your `Makefile` should look like this
+
+```shell
+# Modules directories - with their own makefile
+SERVER_DIR=server
+CLIENT_DIR=client
+MEMORY_DIR=memory
+```
+
+```shell
+.PHONY: server client memory clean install test install-commons
+
+# Directories list
+DIRS = $(SERVER_DIR) $(CLIENT_DIR)
+
+client:
+	cd $(CLIENT_DIR) && $(MAKE_COMPILE)
+
+memory:
+	cd $(MEMORY_DIR) && $(MAKE_COMPILE)
+
+server:
+	cd $(SERVER_DIR) && $(MAKE_COMPILE)
+```
+
+The keyword `MEMORY_DIR` has been added with the value of your directory name `memory`.
+
+`.PHONY` has been modified, adding `memory` after `client`.
+
+`memory` rule has been added, just paste any of the client or server rules and change the `$(DIRECTORY)`
+
+#### Creating your Module
+
+You can easily create your module copying an example module, and modifying the root `Makefile` as shown [above](#makefile).
+
+```shell
+cp -r client memory
+```
+
+**OR** copy the server...
+
+```shell
+cp -r server memory
+```
+
+Then when inside the `memory` directory, run:
+
+```shell
+make run
+```
+
+This will `compile` the module creating a `memory.out` executable in `/build`, and execute it. To test your module you should run:
+
+```shell
+make test
+```
+
+This will run the test defined in `/memory/test`, creating a `memory_out.out` executable.
+
+**NOTE**: the naming of the directory determines the name of the `.out` file.
+Eg. `/example` module will create a `/build/example.out.` and a `/build/example_test.out` files.
+
+#### Launching Options
+
+For debugging using `VsCode`, a `launch.json` should be defined inside `.vscode` directory.
+
+This template contains already a `launch.json` file, I recommend coyping the configurations and modifying for corresponding executables.
+
+```json
+{
+      "name": "Example",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/example.out",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+},
+```
+
+By only modifying `"name": "Your_Module_Name` and `"program":"${workspaceFolder}/build/YOUR_MODULE_NAME.out"`, for debugging test you should add another configuration, changing also `"name"` with `Your_Moodule_Name TEST` and `"program"` with `YOUR_MODULE_NAME_test.out` value.
+
+Eg. of a A full `launch.json` with the `memory` module.
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Memory",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/memory.out",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "Memory",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/memory_test.out",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Going Further
+
+Install `yarn`.
 
 ```
 sudo apt update
@@ -63,14 +324,14 @@ Verfy it with
 yarn --version
 ```
 
-3. Inside the directory, run `yarn install`.
-4. Run the make file using `make` or `yarn start`.
 
 ## Commiting
 
 This project is configurated to use [`standard-version`](https://github.com/conventional-changelog/standard-version) which automaticly generates a [`CHANGELOG.md`](./CHANGELOG.md).
 
 Recommended: read [this article](https://www.mokkapps.de/blog/how-to-automatically-generate-a-helpful-changelog-from-your-git-commit-messages/) about **semantic versions**, _conventional commits_, and using `standard-version`.
+
+Conventional commit types [table with emojis](https://github.com/pvdlg/conventional-commit-types). 
 
 To make use of this you will have to...
 
@@ -92,9 +353,30 @@ git config --global gpg.program gpg2
 gpg --gen-key
 ```
 
-4. Whenever you make changes, follow the [`convetional-commits`](https://www.conventionalcommits.org/en/v1.0.0/)
+### Commit types
 
-5. run `yarn release`
+[Source](https://github.com/pvdlg/conventional-commit-types).
+
+Whenever you make changes, follow the [`convetional-commits`](https://www.conventionalcommits.org/en/v1.0.0/).
+
+| Commit Type | Title                    | Description                                                                                                 | Emoji |
+| ----------- | ------------------------ | ----------------------------------------------------------------------------------------------------------- | :---: |
+| `feat`      | Features                 | A new feature                                                                                               |   ✨   |
+| `fix`       | Bug Fixes                | A bug Fix                                                                                                   |   🐛   |
+| `docs`      | Documentation            | Documentation only changes                                                                                  |   📚   |
+| `style`     | Styles                   | Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)      |   💎   |
+| `refactor`  | Code Refactoring         | A code change that neither fixes a bug nor adds a feature                                                   |   📦   |
+| `perf`      | Performance Improvements | A code change that improves performance                                                                     |   🚀   |
+| `test`      | Tests                    | Adding missing tests or correcting existing tests                                                           |   🚨   |
+| `build`     | Builds                   | Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)         |   🛠   |
+| `ci`        | Continuous Integrations  | Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs) |   ⚙️   |
+| `chore`     | Chores                   | Other changes that don't modify src or test files                                                           |   ♻️   |
+| `revert`    | Reverts                  | Reverts a previous commit                                                                                   |   🗑   |
+
+
+So when you run
+
+`yarn release` there will be an automatically-generated changelog with your commit references.
 
 There is also `yarn release:minor`, `yarn release:patch` and `yarn realease:major`. To follow the semantic versioning.
 
@@ -106,4 +388,4 @@ MIT License: <https://mit-license.org/> or see the [`LICENSE`](https://github.co
 
 ## Credits
 
-This project has been facilitated with 💙 by [Tomás Sánchez](https://github.com/tomasanchez).
+This project has been facilitated with 💙 by [Tomás Sánchez](https://github.com/tomasanchez) & [Roberto Savinelli](https://github.com/rnsavinelli).
