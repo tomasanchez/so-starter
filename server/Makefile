@@ -11,7 +11,7 @@ TCFLAGS = -Wall -Wextra -Wshadow -Wno-unused-variable -Wno-unused-function -Wno-
 # Used libraries
 LIBS = -lcommons -pthread
 #Log Folder
-LOG_FOLDER=../log
+LOG_FOLDER=log
 # Build Folder
 BUILD_FOLDER=../build
 # Include directory
@@ -21,7 +21,7 @@ SOURCE_DIRECTORY=./src
 # Test Directory
 TEST_DIRECTORY=./test
 # The main file path
-MAIN_FILE= ./src/app/main.c
+MAIN_FILE= ./src/main.c
 # The shared library source directory
 LIB_DIRECTORY= ../lib/src
 # Inlcude folder
@@ -32,16 +32,16 @@ LIB_SOURCES = ../shared/*.o
 SOURCES = $(filter-out $(MAIN_FILE), $(shell find $(SOURCE_DIRECTORY) -name '*.c')) $(LIB_SOURCES)
 # Test cases files
 TESTS = $(shell find $(TEST_DIRECTORY) -name '*.c')
-# Application name
-APPNAME = server
+# Module name
+MODULE_NAME = server
 # Output file name
-OUTPUT = $(BUILD_FOLDER)/$(APPNAME).out
+OUTPUT = $(BUILD_FOLDER)/$(MODULE_NAME).out
 # Test Output file
-TEST_OUTPUT = $(BUILD_FOLDER)/$(APPNAME)_test.out
+TEST_OUTPUT = $(BUILD_FOLDER)/$(MODULE_NAME).test.out
 # Leaks log file
-LEAKS = log/leaks.log
+LEAKS_LOG = leaks.log
 # Thread chek log file
-HELGRIND = log/threads.log
+HELGRIND_LOG = threads.log
 
 
 all : compile run
@@ -55,7 +55,7 @@ install:
 
 compile:
 	@mkdir -p $(BUILD_FOLDER)
-	@echo Building module: [$(APPNAME)]... 
+	@echo Building module: [$(MODULE_NAME)]... 
 	$(CC) $(CFLAGS) $(MAIN_FILE) $(SOURCES) $(INCLUDES) $(LIBS) -o $(OUTPUT)
 	@echo Build completed.
 
@@ -75,11 +75,11 @@ test: test-build
 	
 leaks: compile
 	@mkdir -p log
-	valgrind --leak-check=yes --log-file="$(LEAKS)" --track-origins=yes ./$(OUTPUT)
+	valgrind --leak-check=yes --log-file="$(LOG_FOLDER)/$(LEAKS_LOG)" --track-origins=yes ./$(OUTPUT)
 
 threads: compile
 	@mkdir -p log
-	valgrind --tool=helgrind --log-file="$(HELGRIND)" ./$(OUTPUT)
+	valgrind --tool=helgrind --log-file="$(LOG_FOLDER)/$(HELGRIND_LOG)" ./$(OUTPUT)
 
 clean:
 	$(RM) ./$(OUTPUT)
