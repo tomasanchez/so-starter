@@ -68,4 +68,5 @@ Module.symvers
 Mkfile.old
 dkms.conf
 .vscode/settings.json
+log/
 .vscode/c_cpp_properties.json
