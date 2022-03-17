@@ -21,7 +21,7 @@ SOURCE_DIRECTORY=./src
 # Test Directory
 TEST_DIRECTORY=./test
 # The main file path
-MAIN_FILE= ./src/module/main.c
+MAIN_FILE= ./src/main.c
 # The shared library source directory
 LIB_DIRECTORY= ../lib/src
 # Inlcude folder
