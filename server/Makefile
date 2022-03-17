@@ -33,7 +33,7 @@ SOURCES = $(filter-out $(MAIN_FILE), $(shell find $(SOURCE_DIRECTORY) -name '*.c
 # Test cases files
 TESTS = $(shell find $(TEST_DIRECTORY) -name '*.c')
 # Module name
-MODULE_NAME = server
+MODULE_NAME = $(notdir $(shell pwd))
 # Output file name
 OUTPUT = $(BUILD_FOLDER)/$(MODULE_NAME).out
 # Test Output file
