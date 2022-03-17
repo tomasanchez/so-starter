@@ -12,6 +12,7 @@
 
 #include "server.h"
 #include "network.h"
+#include "accion.h"
 #include "log.h"
 #include "thread_manager.h"
 
@@ -202,4 +203,18 @@ inline void *servidor_recibir_stream(int socket, ssize_t *bytes)
 inline ssize_t servidor_enviar_stream(int opcode, int socket, void *iv_str, ssize_t iv_str_size)
 {
     return enviar_stream(opcode, iv_str, iv_str_size, socket);
+}
+
+// ----------------------
+//  Acciones
+// ----------------------
+
+uint32_t servidor_recibir_accion(int socket)
+{
+    return accion_recibir(socket);
+}
+
+ssize_t servidor_enviar_accion(int socket, void *accion)
+{
+    return accion_enviar((accion_t *)accion, socket);
 }
