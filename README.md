@@ -1,20 +1,20 @@
 # Advanced OS Assignment Making
 
 - [Advanced OS Assignment Making](#advanced-os-assignment-making)
-  - [Intro](#intro)
-  - [Getting Started](#getting-started)
-    - [Environment Set Up](#environment-set-up)
-    - [Installation](#installation)
-    - [Openning the project](#openning-the-project)
-      - [Workflows](#workflows)
-      - [Makefile](#makefile)
-      - [Creating your Module](#creating-your-module)
-      - [Launching Options](#launching-options)
-  - [Going Further](#going-further)
-  - [Commiting](#commiting)
-    - [Commit types](#commit-types)
-  - [License](#license)
-  - [Credits](#credits)
+	- [Intro](#intro)
+	- [Getting Started](#getting-started)
+		- [Environment Set Up](#environment-set-up)
+		- [Installation](#installation)
+		- [Openning the project](#openning-the-project)
+			- [Workflows](#workflows)
+			- [Makefile](#makefile)
+			- [Creating your Module](#creating-your-module)
+			- [Launching Options](#launching-options)
+	- [Going Further](#going-further)
+	- [Commiting](#commiting)
+		- [Commit types](#commit-types)
+	- [License](#license)
+	- [Credits](#credits)
 
 ## Intro
 
@@ -104,6 +104,8 @@ Tests completed.
 
 Then everything is working correctly.
 
+I highly recommend configuring format on paste, on save and on type, to maintain a formatted file.
+
 There too many directories! However, it is easy to understand.
 
 1. `.github`: [Workflows](#workflows) actions for Continuous Integration.
@@ -116,7 +118,7 @@ There too many directories! However, it is easy to understand.
 8. `server`: a module implementation example of the TP0 server.
 
 
-#### Workflows 
+#### Workflows
 
 GitHub Actions jobs can be automatically triggered, where they run, and how they can interact with the code in your repository. This starter has a job for testing the project. Each module will execute defined test.
 
@@ -193,6 +195,35 @@ The keyword `MEMORY_DIR` has been added with the value of your directory name `m
 `.PHONY` has been modified, adding `memory` after `client`.
 
 `memory` rule has been added, just paste any of the client or server rules and change the `$(DIRECTORY)`
+
+**NOTE**: About copying & pasting `Makefile`, make sure to set up a `.editorconfig` in your root folder with the following configuration
+
+```properties
+# top-most EditorConfig file
+root = true
+
+[*]
+indent_style = tab
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+```
+
+The important is to set `indent_style` to `tab` otherwise makefile could result in the following error:
+
+```shell
+makefile:13: *** missing separator.  Stop.
+```
+
+It is recommend to
+
+```shell
+cp Makefile DESTINATION_PATH
+```
+
+Where `DESTINATION_PATH` is the path where the Makefile will be copied.
 
 #### Creating your Module
 
@@ -331,7 +362,7 @@ This project is configurated to use [`standard-version`](https://github.com/conv
 
 Recommended: read [this article](https://www.mokkapps.de/blog/how-to-automatically-generate-a-helpful-changelog-from-your-git-commit-messages/) about **semantic versions**, _conventional commits_, and using `standard-version`.
 
-Conventional commit types [table with emojis](https://github.com/pvdlg/conventional-commit-types). 
+Conventional commit types [table with emojis](https://github.com/pvdlg/conventional-commit-types).
 
 To make use of this you will have to...
 
