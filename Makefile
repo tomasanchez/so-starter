@@ -15,9 +15,10 @@ COMMONS=so-commons-library
 
 # Modules directories - with their own makefile
 SERVER_DIR=server
+CLIENT_DIR=client
 
 # Directories list
-DIRS = $(SERVER_DIR)
+DIRS = $(SERVER_DIR) $(CLIENT_DIR)
 
 # Compile script
 MAKE_COMPILE = $(MAKE) compile --no-print-directory
@@ -28,15 +29,18 @@ MAKE_TEST = $(MAKE) test --no-print-directory
 TEST_ALL=$(foreach dir, $(DIRS), cd $(dir) && $(MAKE_TEST) && cd .. &&)
 
 # Todas las aplicaciones
-all: server
+all: server client
 
-.PHONY: server clean install test install-commons
+.PHONY: server client clean install test install-commons
 
 compile: all
 
 install:
 	@echo Installing dependencies...
 # Install required libraries here.
+	@echo "\nInstalling readline"
+	apt-get install libreadline-dev
+	@echo "\nReadline installed!\n"
 	@echo "\nInstalling commons libraries...\n" 
 	@echo $(PWD)
 	rm -rf $(COMMONS)
@@ -46,7 +50,7 @@ install:
 	@echo "\nCommons installed\n"
 	@echo "Building shared libraries...\n" 
 	rm -fr $(OBJ_DIR)
-	cd $(LIB_DIR) && make compile --no-print-directory && cd ..
+	cd $(LIB_DIR) && $(MAKE_COMPILE) && cd ..
 	@echo "Shared libraries built!\n" 
 	@echo Completed
 
@@ -55,6 +59,9 @@ test:
 
 server:
 	cd $(SERVER_DIR) && $(MAKE_COMPILE)
+
+client:
+	cd $(CLIENT_DIR) && $(MAKE_COMPILE)
 
 clean:
 	rm -fr $(BUILD_DIR)
