@@ -5,7 +5,7 @@
 # C Compiler
 CC = gcc
 # Compiler Flags
-CFLAGS = -Wall -Wextra -g3
+CFLAGS = -Wall -Wextra -g3 -c
 # Test Compiler flags
 TCFLAGS = -Wall -Wextra -Wshadow -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-variable -Wno-pragmas -O3 -g3
 # Used libraries
@@ -13,38 +13,32 @@ LIBS = -lcommons
 #Log Folder
 LOG_FOLDER=../log
 # Build Folder
-BUILD_FOLDER=../build
+BUILD_DIRECTORY=../shared
 # Include directory
-INCLUDE_DIRECTORY=./include/ ../lib/inc/
+INCLUDE_DIRECTORY=./inc
 # Source directory
 SOURCE_DIRECTORY=./src
 # Test Directory
 TEST_DIRECTORY=./test
-# The main file path
-MAIN_FILE= ./src/app/main.c
-# The shared library source directory
-LIB_DIRECTORY= ../lib/src
 # Inlcude folder
 INCLUDES = $(foreach dir, $(shell find $(INCLUDE_DIRECTORY) -type d -print), $(addprefix -I , $(dir)))
-# The shared library source files
-LIB_SOURCES = ../shared/*.o
 # Source files
-SOURCES = $(filter-out $(MAIN_FILE), $(shell find $(SOURCE_DIRECTORY) -name '*.c')) $(LIB_SOURCES)
+SOURCES = $(filter-out $(MAIN_FILE), $(shell find $(SOURCE_DIRECTORY) -name '*.c'))
 # Test cases files
 TESTS = $(shell find $(TEST_DIRECTORY) -name '*.c')
 # Application name
-APPNAME = server
+APPNAME = lib
 # Output file name
-OUTPUT = $(BUILD_FOLDER)/$(APPNAME).out
+OUTPUT = $(BUILD_DIRECTORY)/$(APPNAME).o
 # Test Output file
-TEST_OUTPUT = $(BUILD_FOLDER)/$(APPNAME)_test.out
+TEST_OUTPUT = $(BUILD_DIRECTORY)/$(APPNAME)_test.out
 # Leaks log file
 LEAKS = log/leaks.log
 # Thread chek log file
 HELGRIND = log/threads.log
 
 
-all : compile run
+all : compile
 
 .PHONY: all
 
@@ -54,22 +48,17 @@ install:
 	@echo Installed
 
 compile:
-	@mkdir -p $(BUILD_FOLDER)
-	@echo Building module: [$(APPNAME)]... 
-	$(CC) $(CFLAGS) $(MAIN_FILE) $(SOURCES) $(INCLUDES) $(LIBS) -o $(OUTPUT)
+	@mkdir -p $(BUILD_DIRECTORY)
+	@echo Building objects: [$(APPNAME)]... 
+	$(CC) $(CFLAGS) $(SOURCES) $(INCLUDES) $(LIBS) && mv *.o $(BUILD_DIRECTORY)
 	@echo Build completed.
 
-run: compile
-	./$(OUTPUT)
-
 test-build:
-	@mkdir -p $(BUILD_FOLDER)
+	@mkdir -p $(BUILD_DIRECTORY)
 	@echo Preparing tests...
 	$(CC) $(TCFLAGS) $(TESTS) $(SOURCES) $(INCLUDES) $(LIBS) -o $(TEST_OUTPUT)
-	@echo Test builds!
 
 test: test-build
-	@echo Running test cases...
 	./$(TEST_OUTPUT)
 	@echo Tests completed.
 	

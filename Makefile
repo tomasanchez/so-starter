@@ -6,7 +6,10 @@
 BUILD_DIR=build
 # Log directory
 LOG_DIR=log
-
+# Shared Library directory
+LIB_DIR=lib
+# Shared object directory
+OBJ_DIR=shared
 # Commons name
 COMMONS=so-commons-library
 
@@ -38,9 +41,13 @@ install:
 	@echo $(PWD)
 	rm -rf $(COMMONS)
 	git clone "https://github.com/sisoputnfrba/$(COMMONS).git" $(COMMONS)
-	cd $(COMMONS) && sudo make uninstall && sudo make install && cd ..
+	cd $(COMMONS) && sudo make uninstall --no-print-directory && sudo make install --no-print-directory && cd ..
 	rm -rf $(COMMONS)
-	@echo "\nCommons installed\n" 
+	@echo "\nCommons installed\n"
+	@echo "Building shared libraries...\n" 
+	rm -fr $(OBJ_DIR)
+	cd $(LIB_DIR) && make compile --no-print-directory && cd ..
+	@echo "Shared libraries built!\n" 
 	@echo Completed
 
 test:

@@ -18,7 +18,7 @@
 int main(int argc, const char *argv[])
 {
 	printf("\033[0;35m");
-	puts("# Application :: Testing Enviroment");
+	puts("# Server :: Tests");
 	printf("\033[0m");
 
 	return ctest_main(argc, argv);
