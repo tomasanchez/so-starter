@@ -5,10 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "C",
+      "name": "Server",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/a.out",
+      "program": "${workspaceFolder}/build/server.out",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
@@ -24,10 +24,48 @@
       ]
     },
     {
-      "name": "C-Test",
+      "name": "Server-Test",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/a_test.out",
+      "program": "${workspaceFolder}/build/server_test.out",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "Client",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/client.out",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    },
+    {
+      "name": "Client-Test",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/client_test.out",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
