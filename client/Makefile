@@ -9,7 +9,7 @@ CFLAGS = -Wall -Wextra -g3
 # Test Compiler flags
 TCFLAGS = -Wall -Wextra -Wshadow -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-variable -Wno-pragmas -O3 -g3
 # Used libraries
-LIBS = -lcommons
+LIBS = -lreadline -lcommons 
 #Log Folder
 LOG_FOLDER=../log
 # Build Folder
@@ -55,6 +55,7 @@ install:
 
 compile:
 	@mkdir -p $(BUILD_FOLDER)
+	@mkdir -p $(LOG_FOLDER)
 	@echo Building module: [$(APPNAME)]... 
 	$(CC) $(CFLAGS) $(MAIN_FILE) $(SOURCES) $(INCLUDES) $(LIBS) -o $(OUTPUT)
 	@echo Build completed.
