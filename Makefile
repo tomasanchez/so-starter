@@ -87,6 +87,7 @@ install:
 	rm -fr $(OBJ_DIR)
 	cd $(LIB_DIR) && $(MAKE_COMPILE) && cd ..
 	@echo "Shared libraries built!\n"
+	@mkdir -p $(LOG_DIR)
 	@echo Completed
 
 # TODO: Add modules rules below -------------------------------------------------------------------------------------------------------------------
