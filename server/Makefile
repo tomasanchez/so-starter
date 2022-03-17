@@ -9,7 +9,7 @@ CFLAGS = -Wall -Wextra -g3
 # Test Compiler flags
 TCFLAGS = -Wall -Wextra -Wshadow -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-variable -Wno-pragmas -O3 -g3
 # Used libraries
-LIBS = -lcommons
+LIBS = -lcommons -pthread
 #Log Folder
 LOG_FOLDER=../log
 # Build Folder
