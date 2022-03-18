@@ -50,7 +50,7 @@ all: server client
 # ! Allways add your rules for modules in here too
 # ? eg. .PHONY: server client memory filesystem etc  [...] clean install test
 # TODO: add your rules here
-.PHONY: server client clean install test
+.PHONY: server client clean install test lib
 
 
 # ! AVOID MODIFYING THIS SECTION ------------------------------------------------------------------------------------------------------
@@ -83,12 +83,16 @@ install:
 	cd $(COMMONS) && sudo make uninstall --no-print-directory && sudo make install --no-print-directory && cd ..
 	rm -rf $(COMMONS)
 	@echo "\nCommons installed\n"
+	$(MAKE) lib --no-print-directory
+	@mkdir -p $(LOG_DIR)
+	@echo Completed
+
+#Compile the shared library
+lib:
 	@echo "Building shared libraries...\n"
 	rm -fr $(OBJ_DIR)
 	cd $(LIB_DIR) && $(MAKE_COMPILE) && cd ..
 	@echo "Shared libraries built!\n"
-	@mkdir -p $(LOG_DIR)
-	@echo Completed
 
 # TODO: Add modules rules below -------------------------------------------------------------------------------------------------------------------
 

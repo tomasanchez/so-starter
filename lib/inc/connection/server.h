@@ -27,10 +27,10 @@
  */
 typedef struct Servidor
 {
-    // La conexión propia del server (socket, etc)
-    conexion_t conexion;
-    // Si inició o no
-    bool iniciado;
+	// La conexión propia del server (socket, etc)
+	conexion_t conexion;
+	// Si inició o no
+	bool iniciado;
 } servidor_t;
 
 // ============================================================================================================

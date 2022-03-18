@@ -1,10 +1,10 @@
 /**
-* accion.c
-*
-* @file API de Comandos de Consola que se envían a los módulos
-* @author Tomás Sánchez
-* @since  05.04.2021
-*/
+ * accion.c
+ *
+ * @file API de Comandos de Consola que se envían a los módulos
+ * @author Tomás Sánchez
+ * @since  05.04.2021
+ */
 
 #include "accion.h"
 #include "conexion.h"
@@ -16,15 +16,15 @@
 
 /**
  * @brief Serializa una Accion
- * 
+ *
  * @param accion la accion a serializar
- * @return Un stream serializado 
+ * @return Un stream serializado
  */
 void *accion_serializar(const accion_t *accion);
 
 /**
  * @brief Atajo de cáculo del tamaño fijo de una accion
- * 
+ *
  * @return el verdadero sizeOf accion_t
  */
 static ssize_t accion_size();
@@ -47,8 +47,8 @@ void *accion_serializar(const accion_t *accion)
 
 	// Copio de a bytes, incrementando el offset en todos los casos
 	/**
-     *          [ OPCODE ][ PARAM ]
-     */
+	 *          [ OPCODE ][ PARAM ]
+	 */
 	memcpy(stream + lv_offset, &(accion->opcode), sizeof(int));
 	lv_offset += sizeof(int);
 	memcpy(stream + lv_offset, &(accion->param), sizeof(uint32_t));
