@@ -69,6 +69,7 @@ clean:
 
 # ? WATCH OUT MODIFYING THIS INSTALL SECTION --------------------------------------------------------------------------------------------------
 
+# ! Requieres root user
 # Customize the needed dependencies here.
 install:
 	@echo Installing dependencies...
@@ -87,6 +88,7 @@ install:
 	@mkdir -p $(LOG_DIR)
 	@echo Completed
 
+# ! Requieres root user
 #Compile the shared library
 lib:
 	@echo "Building shared libraries...\n"
