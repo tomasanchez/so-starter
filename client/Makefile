@@ -47,9 +47,9 @@ OUTPUT = $(BUILD_FOLDER)/$(MODULE_NAME).out
 # Test Output file
 TEST_OUTPUT = $(BUILD_FOLDER)/$(MODULE_NAME)_test.out
 # Leaks log file
-LEAKS = $(LOG_FOLDER)/leaks.log
+LEAKS = $(LOG_FOLDER)/$(MODULE_NAME)_leaks.log
 # Thread chek log file
-HELGRIND = $(LOG_FOLDER)/threads.log
+HELGRIND = $(LOG_FOLDER)/$(MODULE_NAME)_threads.log
 
 
 all : compile run

@@ -49,9 +49,9 @@ OUTPUT = $(BUILD_FOLDER)/$(MODULE_NAME).out
 # ? eg. memory_test.out
 TEST_OUTPUT = $(BUILD_FOLDER)/$(MODULE_NAME).test.out
 # Leaks log file
-LEAKS_LOG = $(LOG_FOLDER)/leaks.log
+LEAKS = $(LOG_FOLDER)/$(MODULE_NAME)_leaks.log
 # Thread chek log file
-HELGRIND_LOG = $(LOG_FOLDER)/threads.log
+HELGRIND = $(LOG_FOLDER)/$(MODULE_NAME)_threads.log
 
 
 all : compile run
