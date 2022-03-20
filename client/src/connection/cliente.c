@@ -6,7 +6,6 @@
  * @since  05.02.2021
  */
 
-#include "conexion.h"
 #include "cliente.h"
 #include "log.h"
 #include "cfg.h"
@@ -21,21 +20,8 @@
 //                                   ***** Definiciones y Estructuras  *****
 // ============================================================================================================
 
-/**
- * @brief Un modulo servidor
- */
-typedef struct ModuloCliente
-{
-	// La conexion del cliente
-	conexion_t conexion;
-	// El estado del módulo
-	bool status;
-	// Detector de señales
-	int signal;
-} m_client_t;
-
 // El modulo servidor propiamente dicho
-static m_client_t this;
+static client_m_t this;
 
 // ============================================================================================================
 //                                   ***** Funciones Privadas - Declaraciones  *****
