@@ -11,8 +11,11 @@
 			- [Creating your Module](#creating-your-module)
 			- [Launching Options](#launching-options)
 	- [Going Further](#going-further)
-	- [Commiting](#commiting)
-		- [Commit types](#commit-types)
+		- [Versioning](#versioning)
+			- [Project Package](#project-package)
+			- [Signature](#signature)
+			- [Commiting](#commiting)
+			- [Commit types](#commit-types)
 	- [License](#license)
 	- [Credits](#credits)
 
@@ -336,6 +339,11 @@ Eg. of a A full `launch.json` with the `memory` module.
 
 ## Going Further
 
+### Versioning
+
+[`standard-version`](https://github.com/conventional-changelog/standard-version) is an utility for versioning and [`CHANGELOG.md`](./CHANGELOG.md).
+
+
 Install `yarn`.
 
 ```
@@ -355,14 +363,35 @@ Verfy it with
 yarn --version
 ```
 
+#### Project Package
 
-## Commiting
+You will see a `package.json` file containing the following:
 
-This project is configurated to use [`standard-version`](https://github.com/conventional-changelog/standard-version) which automaticly generates a [`CHANGELOG.md`](./CHANGELOG.md).
+```json
+{
+	"name": "so-starter",
+	"version": "1.1.0",
+	"description": "A description",
+	"repository": "https://github.com/tomasanchez/so-starter.git",
+ 	"author": "Tomas <tosanchez@frba.utn.edu.ar>",
+}
+```
 
-Recommended: read [this article](https://www.mokkapps.de/blog/how-to-automatically-generate-a-helpful-changelog-from-your-git-commit-messages/) about **semantic versions**, _conventional commits_, and using `standard-version`.
+You should modify the `"name"` to your project name. `"version"` should be "0.0.1", `"repository"` to your project repository. And `"author"` to your contact information.
 
-Conventional commit types [table with emojis](https://github.com/pvdlg/conventional-commit-types).
+This allows you the following scripts.
+
+**NOTE**: You should remove the [`CHANGELOG`](./CHANGELOG.md) file before running the `first-release` script.
+
+`yarn release:first-release` Will be your first release and will create a new git tag with the name `v.0.0.1`.
+
+`yarn release:patch`: Will bump your version to `X.Y.+1` - use `patch` when fixing bugs.
+
+`yarn release:minor`: Will bump your version to `X.+1.Z` - use `minor` when adding new features.
+
+`yarn release:major`: Will bump your version to `+1.Y.Z` - use `major` when releasing breaking changes to previous versions.
+
+#### Signature
 
 To make use of this you will have to...
 
@@ -384,7 +413,13 @@ git config --global gpg.program gpg2
 gpg --gen-key
 ```
 
-### Commit types
+#### Commiting
+
+Recommended: read [this article](https://www.mokkapps.de/blog/how-to-automatically-generate-a-helpful-changelog-from-your-git-commit-messages/) about **semantic versions**, _conventional commits_, and using `standard-version`.
+
+Conventional commit types [table with emojis](https://github.com/pvdlg/conventional-commit-types).
+
+#### Commit types
 
 [Source](https://github.com/pvdlg/conventional-commit-types).
 
