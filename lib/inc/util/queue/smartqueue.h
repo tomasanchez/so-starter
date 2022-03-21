@@ -8,7 +8,6 @@
 
 #pragma once
 
-#include "lib.h"
 #include <commons/collections/queue.h>
 
 /**
