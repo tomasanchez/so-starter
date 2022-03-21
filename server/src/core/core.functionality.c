@@ -8,7 +8,7 @@
 
 #include "core.functionality.h"
 #include "core.definitions.h"
-
+#include "module.signals.h"
 #include "log.h"
 #include "cfg.h"
 #include "thread_manager.h"
@@ -43,6 +43,9 @@ int init(void)
 
     /* EO initialization routines */
 
+    LOG_DEBUG("Inicializando señales...");
+    signals_init();
+
     return SUCCESS;
 }
 
@@ -67,7 +70,7 @@ int run(void *(*procedure)(void *))
     return SUCCESS;
 }
 
-int stop(void)
+void stop(int exit_code)
 {
     this.status = not RUNNING;
 
@@ -86,5 +89,5 @@ int stop(void)
 
     log_close();
 
-    return SUCCESS;
+    exit(exit_code);
 }
