@@ -1,9 +1,12 @@
 /**
- * servidor.h
+ * @file cliente.h
+ * @author Tomás Sánchez <tosanchez@frba.utn.edu.ar>
+ * @brief A Client Module
+ * @version 2.0
+ * @date 03-20-2022
  *
- * @file API de la iMongo Store
- * @author Tomás Sánchez
- * @since  05.02.2021
+ * @copyright Copyright (c) 2022
+ *
  */
 
 #pragma once
@@ -12,10 +15,26 @@
 #include <stdlib.h>
 
 #include "lib.h"
+#include "conexion.h"
 
 #define CONF_FILE "server.cfg"
 
 #define RUNNING true
+
+/**
+ * @brief
+ *
+ */
+typedef struct ClientModule
+{
+	// La conexion del cliente
+	conexion_t conexion;
+	// El estado del módulo
+	bool status;
+	// Detector de señales
+	int signal;
+
+} client_m_t;
 
 // ============================================================================================================
 //                                   ***** Funciones Públicas  *****

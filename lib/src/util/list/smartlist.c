@@ -1,10 +1,10 @@
 /**
-* smartlist.c
-*
-* @file  API de Smart Lists
-* @author Tomás Sánchez
-* @since  05.20.2021
-*/
+ * smartlist.c
+ *
+ * @file  API de Smart Lists
+ * @author Tomás Sánchez
+ * @since  05.20.2021
+ */
 
 #include "smartlist.h"
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 // ============================================================================================================
 
 // ------------------------------------------------------------
-// Constructor y Destructor
+// Constructor y Destructors
 // ------------------------------------------------------------
 
 t_list *list_smart_create(t_list *list)
@@ -41,6 +41,7 @@ void list_smart_fast_destroy(void *list)
 {
 	list_smart_destroy(list, free);
 }
+
 // ------------------------------------------------------------
 // Adders
 // ------------------------------------------------------------

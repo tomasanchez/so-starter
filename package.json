@@ -1,15 +1,16 @@
 {
-  "name": "c-template",
+  "name": "so-starter",
   "version": "1.1.0",
   "description": "This is an ANCI-C Project Template ",
-  "main": "main.c",
-  "repository": "https://github.com/tomasanchez/c-project.git",
+  "main": "Makefile",
+  "repository": "https://github.com/tomasanchez/so-starter.git",
   "author": "Tomas <tosanchez@frba.utn.edu.ar>",
   "license": "MIT",
   "scripts": {
     "start": "make",
     "clean": "make remove",
     "release": "standard-version",
+    "release:first-release": "standard-version --first-release",
     "release:minor": "standard-version --release-as minor",
     "release:patch": "standard-version --release-as patch",
     "release:major": "standard-version --release-as major"
