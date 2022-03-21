@@ -19,7 +19,5 @@ int main(void)
         }
     }
 
-    stop();
-
-    return EXIT_SUCCESS;
+    stop(SUCCESS);
 }

@@ -25,4 +25,4 @@ int start(void);
 
 int run(void *(*procedure)(void *));
 
-int stop(void);
+void stop(int exit_code);
