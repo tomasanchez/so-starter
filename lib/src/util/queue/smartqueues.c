@@ -1,10 +1,10 @@
 /**
-* smartqueues.c
-*
-* @file API de Queues
-* @author Tomás Sánchez
-* @since  05.22.2021
-*/
+ * smartqueues.c
+ *
+ * @file API de Queues
+ * @author Tomás Sánchez
+ * @since  05.22.2021
+ */
 
 #include "smartqueue.h"
 
