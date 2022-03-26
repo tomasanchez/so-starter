@@ -16,6 +16,10 @@
 			- [Signature](#signature)
 			- [Commiting](#commiting)
 			- [Commit types](#commit-types)
+		- [Testing](#testing)
+			- [Implementation](#implementation)
+			- [Skipping tests](#skipping-tests)
+			- [More complex tests](#more-complex-tests)
 	- [License](#license)
 	- [Credits](#credits)
 
@@ -445,6 +449,126 @@ So when you run
 `yarn release` there will be an automatically-generated changelog with your commit references.
 
 There is also `yarn release:minor`, `yarn release:patch` and `yarn realease:major`. To follow the semantic versioning.
+
+### Testing
+
+Don't you taste your _guiso_ when you're cooking?
+
+**Why do  we test?**
+
+- Validate correct behavior
+- Find bugs
+
+> A good test **finds** bugs
+
+This starter-pack includes a unit-test framework written in C/C++: [`CTEST`](https://github.com/bvdberg/ctest).
+
+
+#### Implementation
+
+Inside each project directory you will find the subdirectories of `src` and `test`.
+
+The `test` directory contains a `core` subdirectory with a `test.c` file. You should avoid modifying the `core` directory at all. However, only for verbose and aesthetics you can change the `<MODULE_NAME>` for corresponding naming.
+
+```c
+int main(int argc, const char *argv[])
+{
+	printf("\033[0;35m");
+	puts("# <MODULE_NAME> :: Tests");
+	printf("\033[0m");
+
+	return ctest_main(argc, argv);
+}
+```
+
+Then you should define different test cases, in separate files. **RECOMMENDED**: use directories/file naming for the functionality tested.
+
+In `client` we want to verify if the configuration file is being loaded. We provided a `config_init` function whith given a path, it opens a `.cfg` file, if it does, returns `SUCCESS` which is a `#define SUCCESS 1` or `ERROR` which is a `#define ERROR -1`.
+
+Eg. from `client/test/common/config.c`.
+
+```c
+CTEST(config, when_configInit_does_init)
+{
+	// Are configurations UP?
+	ASSERT_EQUAL(SUCCESS, config_init(CFG_FILE));
+	config_close();
+};
+```
+
+**NOTE**: the `CTEST` is provided by `ctest.h`, the first argument, in this case `config` is the suite of tests, while the second argument `when_configInit_does_init` is the test name. This will result in the following output (in case it does not fail) when running `make test`.
+
+```
+TEST Y/X config:when_configInit_does_init [OK]
+```
+
+Otherwise if it does fail:
+
+```
+TEST Y/X config:when_configInit_does_init [FAILED]
+	ERR: config.c:Z expected 1, got -1
+```
+
+Remember that `SUCESS` expands to `1` meanwhile `ERROR` expands to `-1`.
+
+#### Skipping tests
+
+Instead of commenting out a test (and subsequently never remembering to turn it back on, ctest allows skipping of tests. Skipped tests are still shown when running tests, but not run. To skip a test add `_SKIP`:
+
+```c
+CTEST_SKIP(..)    or 	CTEST2_SKIP(..)
+```
+
+#### More complex tests
+
+If you have coursed `Systems Design Course` you might have experience with `JUnit` testing for `Java`.
+
+A test case with `setpup` abd `teardown` may resemble  `JUnit 5` anotattions `@BeforeEach` and `@AfterEach` respectively.
+
+You can see an implementation examble in the `client` tests as described below.
+
+```c
+CTEST_DATA(client_send)
+{
+	conexion_t conexion;
+};
+```
+
+We defined a `CTEST_DATA` for the _suite_ `client_send`. This means that every `CTEST(client_send, testname)` will have access to `data->conexion`.
+
+
+```c
+// @BeforeEach
+CTEST_SETUP(client_send)
+{
+	data->conexion = conexion_cliente_create(HOSTNAME, PORT);
+}
+```
+
+Before each `client_send` test, the `SETUP` behavior  will be executed. In this example it is used to instantiate a `conexion`.
+
+```c
+// @AfterEach
+CTEST_TEARDOWN(client_send)
+{
+	if (&data->conexion)
+		conexion_destroy(&data->conexion);
+}
+```
+
+In c for each malloc, a corresponding free **MUST** be executed. After each `client_send` the `TEARDOWN` instructions will be executed.
+
+With this, in our test cases we don't need to worry about creating and deleting objects, for this tests we use `CTEST2` instead of `CTEST`.
+
+```c
+CTEST2(client_send, when_clientSendNULL_then_isError)
+{
+	int result = on_client_send((void *)&data->conexion, NULL);
+	ASSERT_EQUAL(ERROR, result);
+}
+```
+
+For further information read the documentation on the [public repository](https://github.com/bvdberg/ctest).
 
 ## License
 
