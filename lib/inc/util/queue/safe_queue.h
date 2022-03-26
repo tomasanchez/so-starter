@@ -3,21 +3,6 @@
 #include <pthread.h>
 #include <commons/collections/queue.h>
 
-// 
-
-// 	/**
-// 	* @NAME: queue_push
-// 	* @DESC: Agrega un elemento al final de la cola
-// 	*/
-// 	void queue_push(t_queue *, void *element);
-
-// 	/**
-// 	* @NAME: queue_pop
-// 	* @DESC: quita el primer elemento de la cola
-// 	*/
-// 	void *queue_pop(t_queue *);
-
-// 
 typedef struct SafeQueue
 {
 
@@ -42,14 +27,20 @@ typedef struct SafeQueue
 
 /**
  * @brief safely add an element at the last of the queue.
+ * 
+ * @param queue the safe queue itself
+ * 
+ * @param element the element in order to add to the safe queue
  *
- * @return .
+ * @return void
  */
-safe_queue_t safe_queue_push(t_queue *, void *element);
+void safe_queue_push(safe_queue_t *queue, void *element);
 
 /**
- * @brief safely remove the last elementf of the queue.
+ * @brief safely remove the last element of the queue.
  *
- * @return .
+ * @param queue the safe queue itself
+ * 
+ * @return void
  */
-safe_queue_t *safe_queue_pop(t_queue *);
+void safe_queue_pop(safe_queue_t *queue);
