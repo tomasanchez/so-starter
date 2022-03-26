@@ -54,7 +54,7 @@ all : compile
 compile:
 	@mkdir -p $(BUILD_DIRECTORY)
 	@echo Building objects: [$(APPNAME)]...
-	$(CC) $(CFLAGS) $(SOURCES) $(INCLUDES) $(LIBS) && mv *.o $(BUILD_DIRECTORY)
+	$(CC) $(CFLAGS) $(SOURCES) $(INCLUDES) $(LIBS) && mv -f *.o $(BUILD_DIRECTORY)
 	@echo Build completed.
 
 # Test compilation
@@ -62,7 +62,8 @@ compile:
 test-build:
 	@mkdir -p $(BUILD_DIRECTORY)
 	@echo Preparing tests...
-	$(CC) $(TCFLAGS) $(TESTS) $(SOURCES) $(INCLUDES) $(LIBS) -o $(TEST_OUTPUT)
+	$(MAKE) compile
+	$(CC) $(TCFLAGS) $(TESTS) $(BUILD_DIRECTORY)/*.o $(INCLUDES) $(LIBS) -o $(TEST_OUTPUT)
 
 # Runs tests cases
 test: test-build
