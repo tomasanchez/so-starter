@@ -5,30 +5,17 @@
  * @author Tomás Sánchez
  * @since  04.16.2021
  */
-
-#include "conexion.h"
-#include "lib.h"
 #include <signal.h>
 #include <netdb.h>
 #include <fcntl.h>
 
+#include "lib.h"
+#include "conexion.h"
+#include "buffer.h"
+
 // ============================================================================================================
 //                               ***** Conexion -  Definiciones *****
 // ============================================================================================================
-
-/**
- * Buffer de streams.
- *
- * @class
- * @private
- */
-typedef struct Buffer
-{
-	// El tamaño del Buffer
-	int size;
-	// The stream itself
-	void *stream;
-} buffer_t;
 
 /**
  * Paquete a enviable en conexiones.
@@ -83,23 +70,6 @@ static void *paquete_serializar(paquete_t *is_paquete);
  * @returns los bytes que requiere
  */
 static int paquete_calcular_bytes(paquete_t *);
-
-/**
- * Instancia un buffer.
- *
- * @private
- * @param size el tamaño que requiere el buffer
- * @returns un nuevo buffer
- */
-static buffer_t *buffer_create(size_t);
-
-/**
- * Libera la memoria de un buffer
- *
- * @private
- * @param buffer el buffer a destruirse.
- */
-static void buffer_destroy(buffer_t *);
 
 /**
  * Encapsula los funcionamientos de getaddrinfo
@@ -189,25 +159,6 @@ static int paquete_calcular_bytes(paquete_t *is_paquete)
 {
 	// Bytes del buffer + bytes del opcode + el 'size' de los bytes (cantidad de bytes enviados es un int)
 	return is_paquete->buffer->size + 2 * sizeof(int);
-}
-
-// -----------------------------------------------------------
-//  Buffer
-// ------------------------------------------------------------
-
-static buffer_t *buffer_create(size_t iv_size)
-{
-	// Estructura a Exportar buffer - el nuevo buffer de tamaño IV_SIZE
-	buffer_t *es_buffer = malloc(sizeof(buffer_t));
-	es_buffer->size = iv_size;
-	es_buffer->stream = malloc(es_buffer->size);
-	return es_buffer;
-}
-
-static inline void buffer_destroy(buffer_t *is_buffer)
-{
-	free(is_buffer->stream);
-	free(is_buffer);
 }
 
 // -----------------------------------------------------------
