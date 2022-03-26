@@ -93,7 +93,7 @@ install:
 lib:
 	@echo "Building shared libraries...\n"
 	rm -fr $(OBJ_DIR)
-	cd $(LIB_DIR) && $(MAKE_COMPILE) && cd ..
+	cd $(LIB_DIR) && $(MAKE) test --no-print-directory && cd ..
 	@echo "Shared libraries built!\n"
 
 # TODO: Add modules rules below -------------------------------------------------------------------------------------------------------------------
