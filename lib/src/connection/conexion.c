@@ -24,10 +24,10 @@
  */
 typedef struct Buffer
 {
-    // El tamaño del Buffer
-    int size;
-    // The stream itself
-    void *stream;
+	// El tamaño del Buffer
+	int size;
+	// The stream itself
+	void *stream;
 } buffer_t;
 
 /**
@@ -38,10 +38,10 @@ typedef struct Buffer
  */
 typedef struct Paquete
 {
-    // Código de operación
-    opcode_t opcode;
-    // Buffer interno
-    buffer_t *buffer;
+	// Código de operación
+	opcode_t opcode;
+	// Buffer interno
+	buffer_t *buffer;
 } paquete_t;
 
 // ============================================================================================================
@@ -121,74 +121,74 @@ int direccionar(char *, char *, conexion_t *);
 static paquete_t *
 paquete_create(opcode_t iv_opcode, char *iv_stream)
 {
-    // Estructura a Exportar paquete - el nuevo paquete a serializarse
-    paquete_t *es_paquete = malloc(sizeof(paquete_t));
+	// Estructura a Exportar paquete - el nuevo paquete a serializarse
+	paquete_t *es_paquete = malloc(sizeof(paquete_t));
 
-    // Variable Local size - longitud de palabra + '\0'
-    size_t lv_buffer_size = strlen(iv_stream) + 1;
+	// Variable Local size - longitud de palabra + '\0'
+	size_t lv_buffer_size = strlen(iv_stream) + 1;
 
-    es_paquete->opcode = iv_opcode;
-    es_paquete->buffer = buffer_create(lv_buffer_size);
+	es_paquete->opcode = iv_opcode;
+	es_paquete->buffer = buffer_create(lv_buffer_size);
 
-    // Copio los bytes del stream al buffer
-    memcpy(es_paquete->buffer->stream, iv_stream, es_paquete->buffer->size);
+	// Copio los bytes del stream al buffer
+	memcpy(es_paquete->buffer->stream, iv_stream, es_paquete->buffer->size);
 
-    return es_paquete;
+	return es_paquete;
 }
 
 static paquete_t *
 paquete_stream_create(opcode_t iv_opcode, void *iv_stream, ssize_t stream_size)
 {
-    // Estructura a Exportar paquete - el nuevo paquete a serializarse
-    paquete_t *es_paquete = malloc(sizeof(paquete_t));
+	// Estructura a Exportar paquete - el nuevo paquete a serializarse
+	paquete_t *es_paquete = malloc(sizeof(paquete_t));
 
-    es_paquete->opcode = iv_opcode;
-    es_paquete->buffer = buffer_create(stream_size);
+	es_paquete->opcode = iv_opcode;
+	es_paquete->buffer = buffer_create(stream_size);
 
-    // Copio los bytes del stream al buffer
-    memcpy(es_paquete->buffer->stream, iv_stream, es_paquete->buffer->size);
+	// Copio los bytes del stream al buffer
+	memcpy(es_paquete->buffer->stream, iv_stream, es_paquete->buffer->size);
 
-    return es_paquete;
+	return es_paquete;
 }
 
 static inline void paquete_destroy(paquete_t *is_paquete)
 {
-    buffer_destroy(is_paquete->buffer);
-    free(is_paquete);
+	buffer_destroy(is_paquete->buffer);
+	free(is_paquete);
 }
 
 static void *paquete_serializar(paquete_t *is_paquete)
 {
-    // Variable Local bytes - the bytes a enviarse
-    int lv_bytes = paquete_calcular_bytes(is_paquete);
+	// Variable Local bytes - the bytes a enviarse
+	int lv_bytes = paquete_calcular_bytes(is_paquete);
 
-    // Exporting paquete - el paquete serializado
-    void *e_paquete = NULL;
-    e_paquete = malloc(lv_bytes);
+	// Exporting paquete - el paquete serializado
+	void *e_paquete = NULL;
+	e_paquete = malloc(lv_bytes);
 
-    // Variable Local offset - el offset del stream
-    int lv_offset = 0;
+	// Variable Local offset - el offset del stream
+	int lv_offset = 0;
 
-    // Copio de a bytes, incrementando el offset en todos los casos
-    /**
-     *          [ OPCODE ][ SIZE del MSG ][ MSG ]
-     */
-    memcpy(e_paquete + lv_offset, &(is_paquete->opcode), sizeof(int));
-    lv_offset += sizeof(int);
+	// Copio de a bytes, incrementando el offset en todos los casos
+	/**
+	 *          [ OPCODE ][ SIZE del MSG ][ MSG ]
+	 */
+	memcpy(e_paquete + lv_offset, &(is_paquete->opcode), sizeof(int));
+	lv_offset += sizeof(int);
 
-    memcpy(e_paquete + lv_offset, &(is_paquete->buffer->size), sizeof(int));
-    lv_offset += sizeof(int);
+	memcpy(e_paquete + lv_offset, &(is_paquete->buffer->size), sizeof(int));
+	lv_offset += sizeof(int);
 
-    memcpy(e_paquete + lv_offset, is_paquete->buffer->stream, is_paquete->buffer->size);
-    lv_offset += is_paquete->buffer->size;
+	memcpy(e_paquete + lv_offset, is_paquete->buffer->stream, is_paquete->buffer->size);
+	lv_offset += is_paquete->buffer->size;
 
-    return e_paquete;
+	return e_paquete;
 }
 
 static int paquete_calcular_bytes(paquete_t *is_paquete)
 {
-    // Bytes del buffer + bytes del opcode + el 'size' de los bytes (cantidad de bytes enviados es un int)
-    return is_paquete->buffer->size + 2 * sizeof(int);
+	// Bytes del buffer + bytes del opcode + el 'size' de los bytes (cantidad de bytes enviados es un int)
+	return is_paquete->buffer->size + 2 * sizeof(int);
 }
 
 // -----------------------------------------------------------
@@ -197,17 +197,17 @@ static int paquete_calcular_bytes(paquete_t *is_paquete)
 
 static buffer_t *buffer_create(size_t iv_size)
 {
-    // Estructura a Exportar buffer - el nuevo buffer de tamaño IV_SIZE
-    buffer_t *es_buffer = malloc(sizeof(buffer_t));
-    es_buffer->size = iv_size;
-    es_buffer->stream = malloc(es_buffer->size);
-    return es_buffer;
+	// Estructura a Exportar buffer - el nuevo buffer de tamaño IV_SIZE
+	buffer_t *es_buffer = malloc(sizeof(buffer_t));
+	es_buffer->size = iv_size;
+	es_buffer->stream = malloc(es_buffer->size);
+	return es_buffer;
 }
 
 static inline void buffer_destroy(buffer_t *is_buffer)
 {
-    free(is_buffer->stream);
-    free(is_buffer);
+	free(is_buffer->stream);
+	free(is_buffer);
 }
 
 // -----------------------------------------------------------
@@ -216,22 +216,22 @@ static inline void buffer_destroy(buffer_t *is_buffer)
 
 int direccionar(char *iv_ip, char *iv_puerto, conexion_t *is_conexion)
 {
-    // Estructura local hints - Las hints para la creacion del socket.
-    struct addrinfo ls_hints;
-    int rv;
+	// Estructura local hints - Las hints para la creacion del socket.
+	struct addrinfo ls_hints;
+	int rv;
 
-    // Seteos de memoria a las hints -- No importa como funciona
-    memset(&ls_hints, 0, sizeof(ls_hints));
-    ls_hints.ai_family = AF_UNSPEC;
-    ls_hints.ai_socktype = SOCK_STREAM;
-    ls_hints.ai_flags = AI_PASSIVE;
-    if ((rv = getaddrinfo(iv_ip, iv_puerto, &ls_hints, &is_conexion->info_server)) != 0)
-    {
-        fprintf(stderr, "%s\n", gai_strerror(rv));
-        return ERROR;
-    }
+	// Seteos de memoria a las hints -- No importa como funciona
+	memset(&ls_hints, 0, sizeof(ls_hints));
+	ls_hints.ai_family = AF_UNSPEC;
+	ls_hints.ai_socktype = SOCK_STREAM;
+	ls_hints.ai_flags = AI_PASSIVE;
+	if ((rv = getaddrinfo(iv_ip, iv_puerto, &ls_hints, &is_conexion->info_server)) != 0)
+	{
+		fprintf(stderr, "%s\n", gai_strerror(rv));
+		return ERROR;
+	}
 
-    return SUCCESS;
+	return SUCCESS;
 }
 
 // -----------------------------------------------------------
@@ -240,43 +240,43 @@ int direccionar(char *iv_ip, char *iv_puerto, conexion_t *is_conexion)
 
 bool tiene_mensaje(char *iv_mensaje)
 {
-    return iv_mensaje != NULL && strlen(iv_mensaje) > 0;
+	return iv_mensaje != NULL && strlen(iv_mensaje) > 0;
 }
 
 ssize_t enviar_str(char *iv_str, int iv_socket)
 {
-    // Estructura Local paquete - el paquete a enviar
-    paquete_t *ls_paquete = paquete_create(MSG, iv_str);
+	// Estructura Local paquete - el paquete a enviar
+	paquete_t *ls_paquete = paquete_create(MSG, iv_str);
 
-    // Local stream - el paquete serializado, requiere free(1)
-    void *l_stream = paquete_serializar(ls_paquete);
+	// Local stream - el paquete serializado, requiere free(1)
+	void *l_stream = paquete_serializar(ls_paquete);
 
-    // Variable a Exportar bytes - Los bytes enviados o ERROR (-1)
-    ssize_t ev_bytes = send(iv_socket, l_stream, paquete_calcular_bytes(ls_paquete), 0);
+	// Variable a Exportar bytes - Los bytes enviados o ERROR (-1)
+	ssize_t ev_bytes = send(iv_socket, l_stream, paquete_calcular_bytes(ls_paquete), 0);
 
-    free(l_stream);
+	free(l_stream);
 
-    paquete_destroy(ls_paquete);
+	paquete_destroy(ls_paquete);
 
-    return ev_bytes;
+	return ev_bytes;
 }
 
 ssize_t enviar_stream(opcode_t opcode, void *iv_str, size_t iv_str_size, int iv_socket)
 {
-    // Estructura Local paquete - el paquete a enviar
-    paquete_t *ls_paquete = paquete_stream_create(opcode, iv_str, iv_str_size);
+	// Estructura Local paquete - el paquete a enviar
+	paquete_t *ls_paquete = paquete_stream_create(opcode, iv_str, iv_str_size);
 
-    // Local stream - el paquete serializado, requiere free(1)
-    void *l_stream = paquete_serializar(ls_paquete);
+	// Local stream - el paquete serializado, requiere free(1)
+	void *l_stream = paquete_serializar(ls_paquete);
 
-    // Variable a Exportar bytes - Los bytes enviados o ERROR (-1)
-    ssize_t ev_bytes = send(iv_socket, l_stream, paquete_calcular_bytes(ls_paquete), 0);
+	// Variable a Exportar bytes - Los bytes enviados o ERROR (-1)
+	ssize_t ev_bytes = send(iv_socket, l_stream, paquete_calcular_bytes(ls_paquete), 0);
 
-    free(l_stream);
+	free(l_stream);
 
-    paquete_destroy(ls_paquete);
+	paquete_destroy(ls_paquete);
 
-    return ev_bytes;
+	return ev_bytes;
 }
 
 // ============================================================================================================
@@ -289,71 +289,71 @@ ssize_t enviar_stream(opcode_t opcode, void *iv_str, size_t iv_str_size, int iv_
 
 conexion_t conexion_cliente_create(char *iv_ip, char *iv_puerto)
 {
-    // Estructura a Exportar conexion - La nueva conexión
-    conexion_t es_conexion;
+	// Estructura a Exportar conexion - La nueva conexión
+	conexion_t es_conexion;
 
-    direccionar(iv_ip, iv_puerto, &es_conexion);
+	direccionar(iv_ip, iv_puerto, &es_conexion);
 
-    // Creo el socket y la conexion
-    es_conexion.socket = socket(es_conexion.info_server->ai_family, es_conexion.info_server->ai_socktype, es_conexion.info_server->ai_protocol);
-    es_conexion.conectado = false;
+	// Creo el socket y la conexion
+	es_conexion.socket = socket(es_conexion.info_server->ai_family, es_conexion.info_server->ai_socktype, es_conexion.info_server->ai_protocol);
+	es_conexion.conectado = false;
 
-    return es_conexion;
+	return es_conexion;
 }
 
 conexion_t conexion_servidor_create(char *iv_ip, char *iv_puerto)
 {
 
-    // Estructura a Exportar conexion - La nueva conexión
-    conexion_t es_conexion = {NULL, 0, false};
-    int yes = 1;
+	// Estructura a Exportar conexion - La nueva conexión
+	conexion_t es_conexion = {NULL, 0, false};
+	int yes = 1;
 
-    if (direccionar(iv_ip, iv_puerto, &es_conexion) == ERROR)
-    {
-        return es_conexion;
-    }
+	if (direccionar(iv_ip, iv_puerto, &es_conexion) == ERROR)
+	{
+		return es_conexion;
+	}
 
-    // Estructura local info - iterador de la lista de ardrinfo.
-    struct addrinfo *ls_info;
+	// Estructura local info - iterador de la lista de ardrinfo.
+	struct addrinfo *ls_info;
 
-    for (ls_info = es_conexion.info_server; ls_info != NULL; ls_info = ls_info->ai_next)
-    {
-        // Busco el socket que puede abirse
-        es_conexion.socket = socket(ls_info->ai_family, ls_info->ai_socktype, ls_info->ai_protocol);
-        if (es_conexion.socket < 0)
-        {
-            continue;
-        }
+	for (ls_info = es_conexion.info_server; ls_info != NULL; ls_info = ls_info->ai_next)
+	{
+		// Busco el socket que puede abirse
+		es_conexion.socket = socket(ls_info->ai_family, ls_info->ai_socktype, ls_info->ai_protocol);
+		if (es_conexion.socket < 0)
+		{
+			continue;
+		}
 
-        // Lose the pesky "address already in use" error message
-        setsockopt(es_conexion.socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
+		// Lose the pesky "address already in use" error message
+		setsockopt(es_conexion.socket, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 
-        // Avoids a blocking accept state (ADDS BUSY WAITING)
-        // fcntl(es_conexion.socket, F_SETFL, O_NONBLOCK);
+		// Avoids a blocking accept state (ADDS BUSY WAITING)
+		// fcntl(es_conexion.socket, F_SETFL, O_NONBLOCK);
 
-        // Corroboro que además de abrirse, el socket puede bindears
-        if (bind(es_conexion.socket, ls_info->ai_addr, ls_info->ai_addrlen) EQ ERROR)
-        {
-            // Si no bindea, cierro el socket
-            close(es_conexion.socket);
-            continue;
-        }
+		// Corroboro que además de abrirse, el socket puede bindears
+		if (bind(es_conexion.socket, ls_info->ai_addr, ls_info->ai_addrlen) EQ ERROR)
+		{
+			// Si no bindea, cierro el socket
+			close(es_conexion.socket);
+			continue;
+		}
 
-        // Si todo salio OK simplemente rompo el LOOP.
-        break;
-    }
+		// Si todo salio OK simplemente rompo el LOOP.
+		break;
+	}
 
-    // Para el SERVER, considero conectado cuando se encuentra escuchando (listen)
-    es_conexion.conectado = false;
+	// Para el SERVER, considero conectado cuando se encuentra escuchando (listen)
+	es_conexion.conectado = false;
 
-    return es_conexion;
+	return es_conexion;
 }
 
 inline void conexion_destroy(conexion_t *is_conexion)
 {
-    conexion_desconectar(is_conexion);
-    // Libero la información del server
-    freeaddrinfo(is_conexion->info_server);
+	conexion_desconectar(is_conexion);
+	// Libero la información del server
+	freeaddrinfo(is_conexion->info_server);
 }
 
 // ------------------------------------------------------------
@@ -362,64 +362,41 @@ inline void conexion_destroy(conexion_t *is_conexion)
 
 inline int conexion_conectar(conexion_t *is_conexion)
 {
-    // Conecto, y guardo si se pudo conectar
-    is_conexion->conectado =
-        connect(is_conexion->socket, is_conexion->info_server->ai_addr, is_conexion->info_server->ai_addrlen) != ERROR;
+	// Conecto, y guardo si se pudo conectar
+	is_conexion->conectado =
+		connect(is_conexion->socket, is_conexion->info_server->ai_addr, is_conexion->info_server->ai_addrlen) != ERROR;
 
-    // Devuelvo si tuvo exito o error
-    return is_conexion->conectado ? is_conexion->socket : ERROR;
+	// Devuelvo si tuvo exito o error
+	return is_conexion->conectado ? is_conexion->socket : ERROR;
 }
 
 inline int conexion_escuchar(conexion_t *is_conexion)
 {
-    // Escucho, y guardo el resultado de si se pudo abrir la escucha
+	// Escucho, y guardo el resultado de si se pudo abrir la escucha
 
-    is_conexion->conectado = listen(is_conexion->socket, SOMAXCONN) != ERROR;
+	is_conexion->conectado = listen(is_conexion->socket, SOMAXCONN) != ERROR;
 
-    return is_conexion->conectado ? SUCCESS : ERROR;
+	return is_conexion->conectado ? SUCCESS : ERROR;
 }
 
 inline int conexion_desconectar(const conexion_t *is_conexion)
 {
-    return close(is_conexion->socket);
+	return close(is_conexion->socket);
 }
 
 int conexion_esperar_cliente(conexion_t is_conexion)
 {
-    // Estructura Local direccion de cliente - La informacion de direccion del cliente.
-    struct sockaddr_in ls_dir_cliente;
-    // Variable local tamaño de dirección
-    unsigned int lv_dir_size = sizeof(struct sockaddr_in);
+	// Estructura Local direccion de cliente - La informacion de direccion del cliente.
+	struct sockaddr_in ls_dir_cliente;
+	// Variable local tamaño de dirección
+	unsigned int lv_dir_size = sizeof(struct sockaddr_in);
 
-    return accept(is_conexion.socket, (void *)&ls_dir_cliente, &lv_dir_size);
+	return accept(is_conexion.socket, (void *)&ls_dir_cliente, &lv_dir_size);
 }
 
 inline bool conexion_esta_conectada(conexion_t is_conexion)
 {
-    return is_conexion.conectado;
-}
-
-// ------------------------------------------------------------
-//  Utilities
-// ------------------------------------------------------------
-
-char *opcode_to_string(opcode_t opcode)
-{
-    switch (opcode)
-    {
-    // Disconnected - Desconectado
-    case DC:
-        return "Desconectado";
-    // Message - mensaje estándar
-    case MSG:
-        return "Mensaje";
-    // Package - paquete
-    case PKG:
-        return "Paquete";
-    // TODO : Agregar los casos correspondientes
-    default:
-        return "Código de operación no reconocido";
-    }
+	return is_conexion.conectado;
 }
 
 // ------------------------------------------------------------
@@ -432,7 +409,7 @@ char *opcode_to_string(opcode_t opcode)
 
 inline ssize_t conexion_enviar_mensaje(conexion_t is_conexion, char *iv_mensaje)
 {
-    return conexion_esta_conectada(is_conexion) ? enviar_str(iv_mensaje, is_conexion.socket) : ERROR;
+	return conexion_esta_conectada(is_conexion) ? enviar_str(iv_mensaje, is_conexion.socket) : ERROR;
 }
 
 // --------------
@@ -440,5 +417,5 @@ inline ssize_t conexion_enviar_mensaje(conexion_t is_conexion, char *iv_mensaje)
 // --------------
 inline ssize_t conexion_enviar_stream(conexion_t is_conexion, opcode_t opcode, void *iv_stream, size_t iv_size)
 {
-    return conexion_esta_conectada(is_conexion) ? enviar_stream(opcode, iv_stream, iv_size, is_conexion.socket) : ERROR;
+	return conexion_esta_conectada(is_conexion) ? enviar_stream(opcode, iv_stream, iv_size, is_conexion.socket) : ERROR;
 }

@@ -14,6 +14,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include "opcode.h"
 
 // ============================================================================================================
 //                               ***** Tipos (y estructuras) *****
@@ -27,40 +28,17 @@
  */
 typedef struct Conexion
 {
-    // Información del Servidor
-    struct addrinfo *info_server;
-    // El número de socket instanciado
-    int socket;
-    // Si pudo conectarse
-    bool conectado;
+	// Información del Servidor
+	struct addrinfo *info_server;
+	// El número de socket instanciado
+	int socket;
+	// Si pudo conectarse
+	bool conectado;
 } conexion_t;
-
-/**
- * Opcode - Código de operación de mensajes.
- *
- */
-typedef enum Opcode
-{
-    // Disconnected - Desconectado
-    DC,
-    // Message - mensaje estándar
-    MSG,
-    // Package - paquete
-    PKG,
-    // TODO: Agregar los opcodes que vayan surgiendo
-} opcode_t;
 
 // ============================================================================================================
 //                                   ***** Funciones Públicas  *****
 // ============================================================================================================
-
-/**
- * @brief Obtiene el nombre del Opcode
- *
- * @param opcode el numero de operación
- * @return El label del opcode.
- */
-char *opcode_to_string(opcode_t opcode);
 
 // -----------------------------------------------------------
 //  Constructor y Destructor
