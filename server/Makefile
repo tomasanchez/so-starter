@@ -18,7 +18,7 @@ LOG_FOLDER=../log
 # Build Folder
 BUILD_FOLDER=../build
 # Include directory
-INCLUDE_DIRECTORY=./include/ ../lib/inc/
+INCLUDE_DIRECTORY=./inc/ ../lib/inc/
 # Source directory
 SOURCE_DIRECTORY=./src
 # Test Directory
@@ -88,13 +88,13 @@ test: test-build
 
 # ! Uses Valgrind MemCheck tool
 leaks: compile
-	@mkdir -p log
-	valgrind --leak-check=yes --log-file="$(LOG_FOLDER)/$(LEAKS_LOG)" --track-origins=yes ./$(OUTPUT)
+	@mkdir -p $(LOG_FOLDER)
+	valgrind --leak-check=yes --log-file="$(LOG_FOLDER)/$(LEAKS)" --track-origins=yes ./$(OUTPUT)
 
 # ! Uses Valgrind Helgrind tool
 threads: compile
-	@mkdir -p log
-	valgrind --tool=helgrind --log-file="$(LOG_FOLDER)/$(HELGRIND_LOG)" ./$(OUTPUT)
+	@mkdir -p $(LOG_FOLDER)
+	valgrind --tool=helgrind --log-file="$(LOG_FOLDER)/$(HELGRIND)" ./$(OUTPUT)
 
 # Removes Output files
 clean:
