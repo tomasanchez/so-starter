@@ -9,6 +9,9 @@
  *
  */
 
+#include <stdlib.h>
+#include <string.h>
+
 #include "buffer.h"
 #include "ctest.h"
 
@@ -22,7 +25,7 @@ CTEST(buffer, when_bufferIsCreated_then_hasSpecifiedSize)
 
 	ASSERT_EQUAL(size, buffer->size);
 	buffer_destroy(buffer);
-}
+};
 
 CTEST(buffer, when_bufferIsDestroyed_then_isFreed)
 {
@@ -30,4 +33,18 @@ CTEST(buffer, when_bufferIsDestroyed_then_isFreed)
 	buffer_t *buffer = buffer_create(size);
 	buffer_destroy(buffer);
 	ASSERT_NOT_EQUAL(size, buffer->size);
-}
+};
+
+CTEST(buffer, when_somethingInBuffer_then_canBeRecovered)
+{
+	char *hello = "Hello";
+	buffer_t *buffer = new_buffer(strlen(hello) + 1, hello);
+
+	char *recovered = malloc(buffer->size);
+	memcpy(recovered, buffer->stream, buffer->size);
+
+	ASSERT_STR(hello, recovered);
+
+	free(recovered);
+	buffer_destroy(buffer);
+};
