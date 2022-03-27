@@ -29,6 +29,13 @@
 // No error
 #define SUCCESS 1
 
+enum
+{
+	LOG_INITIALIZATION_ERROR = -255,
+	CONFIGURATION_INITIALIZATION_ERROR,
+	SERVER_RUNTIME_ERROR
+};
+
 // Not Equals
 #define NE !=
 

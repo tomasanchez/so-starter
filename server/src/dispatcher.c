@@ -1,8 +1,7 @@
 #include <commons/string.h>
 #include <commons/collections/list.h>
 
-#include "core.functionality.h"
-#include "module.dispatcher.h"
+#include "dispatcher.h"
 #include "thread_manager.h"
 #include "server.h"
 #include "smartlist.h"
@@ -13,9 +12,6 @@
 // ============================================================================================================
 //                               ***** Dispatcher -  Definiciones *****
 // ============================================================================================================
-
-// El módulo
-extern t_module this;
 
 // Los PIDs
 bool pids[PIDS];
@@ -59,13 +55,13 @@ static int _get_cliente(void *args, size_t *offset);
 
 void *dispatch_imprimir_mensaje(void *args)
 {
-    char *msg = ((char *)args);
+	char *msg = ((char *)args);
 
-    THREAD_SAFE(LOG_INFO("Mensaje: %s", msg));
+	THREAD_SAFE(LOG_INFO("Mensaje: %s", msg));
 
-    free(msg);
+	free(msg);
 
-    return NULL;
+	return NULL;
 }
 
 // ------------------------------------------------------------
@@ -74,36 +70,36 @@ void *dispatch_imprimir_mensaje(void *args)
 
 static uint32_t get_pid_libre(void)
 {
-    for (uint32_t i = 0; i < PIDS; i++)
-    {
-        if (!pids[i])
-        {
-            pids[i] = true;
-            return i;
-        }
-    }
+	for (uint32_t i = 0; i < PIDS; i++)
+	{
+		if (!pids[i])
+		{
+			pids[i] = true;
+			return i;
+		}
+	}
 
-    return UNDEFINED;
+	return UNDEFINED;
 }
 
 static int _get_cliente(void *args, size_t *offset)
 {
-    int cliente = 0;
+	int cliente = 0;
 
-    memcpy((void *)&cliente, args + *offset, sizeof(int));
-    *offset += sizeof(int);
+	memcpy((void *)&cliente, args + *offset, sizeof(int));
+	*offset += sizeof(int);
 
-    return cliente;
+	return cliente;
 }
 
 static uint32_t _get_uint32(void *stream, size_t *offset)
 {
-    uint32_t value = 0;
+	uint32_t value = 0;
 
-    memcpy((void *)&value, stream + *offset, sizeof(uint32_t));
-    *offset += sizeof(uint32_t);
+	memcpy((void *)&value, stream + *offset, sizeof(uint32_t));
+	*offset += sizeof(uint32_t);
 
-    return value;
+	return value;
 }
 
 // ----------------------

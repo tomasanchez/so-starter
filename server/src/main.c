@@ -6,18 +6,16 @@
  * @since  03.17.2022
  */
 
-#include "core.functionality.h"
-#include "module.procedures.h"
+#include "runtime.h"
+
+context_t g_context;
 
 int main(void)
 {
-    if (init() == SUCCESS)
-    {
-        if (start() == SUCCESS)
-        {
-            run(procedures);
-        }
-    }
+	int exit_code = init(&g_context);
 
-    stop(SUCCESS);
+	if (exit_code == EXIT_SUCCESS)
+		exit_code = run(&g_context);
+
+	stop(&g_context, exit_code);
 }
