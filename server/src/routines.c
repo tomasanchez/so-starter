@@ -1,4 +1,4 @@
-#include "main.h"
+#include "runtime.h"
 #include "server.h"
 #include "dispatcher.h"
 #include "log.h"

@@ -14,6 +14,9 @@
 #define CTEST_COLOR_OK
 
 #include "ctest.h"
+#include "runtime.h"
+
+context_t g_context;
 
 int main(int argc, const char *argv[])
 {

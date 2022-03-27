@@ -6,15 +6,15 @@
 #include "signals.h"
 #include "lib.h"
 #include "log.h"
-#include "main.h"
+#include "runtime.h"
 
-extern servidor_t g_server;
+extern context_t g_context;
 
 static void
 _sigint()
 {
 	LOG_WARNING("Se capturó la señal SIGINT");
-	stop(&g_server, SIGINT);
+	stop(&(g_context), SIGINT);
 }
 
 static void
