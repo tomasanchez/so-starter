@@ -9,6 +9,7 @@
  *
  */
 #include <stdlib.h>
+#include <string.h>
 
 #include "buffer.h"
 
@@ -23,6 +24,13 @@ buffer_t *buffer_create(size_t size)
 	buffer = malloc(sizeof(buffer_t));
 	buffer->size = size;
 	buffer->stream = malloc(buffer->size);
+	return buffer;
+}
+
+buffer_t *new_buffer(size_t size, void *stream)
+{
+	buffer_t *buffer = buffer_create(size);
+	memcpy(buffer->stream, stream, size);
 	return buffer;
 }
 
