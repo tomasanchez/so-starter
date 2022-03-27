@@ -9,6 +9,7 @@
  *
  */
 #include <stdlib.h>
+#include <string.h>
 
 #include "buffer.h"
 
@@ -18,15 +19,29 @@
 
 buffer_t *buffer_create(size_t size)
 {
-	// A new buffer instace
-	buffer_t *buffer = malloc(sizeof(buffer_t));
+	// A new buffer to be instaciated
+	buffer_t *buffer = NULL;
+	buffer = malloc(sizeof(buffer_t));
 	buffer->size = size;
 	buffer->stream = malloc(buffer->size);
 	return buffer;
 }
 
+buffer_t *new_buffer(size_t size, void *stream)
+{
+	buffer_t *buffer = buffer_create(size);
+	memcpy(buffer->stream, stream, size);
+	return buffer;
+}
+
 void buffer_destroy(buffer_t *buffer_instance)
 {
-	free(buffer_instance->stream);
+	if (buffer_instance == NULL)
+		return;
+
+	if (buffer_instance->stream != NULL)
+		free(buffer_instance->stream);
+	buffer_instance->stream = NULL;
+
 	free(buffer_instance);
 }
