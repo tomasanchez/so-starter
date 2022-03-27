@@ -12,64 +12,15 @@
 #include "lib.h"
 #include "conexion.h"
 #include "buffer.h"
+#include "package.h"
 
 // ============================================================================================================
 //                               ***** Conexion -  Definiciones *****
 // ============================================================================================================
 
-/**
- * Paquete a enviable en conexiones.
- *
- * @class
- * @private
- */
-typedef struct Paquete
-{
-	// Código de operación
-	opcode_t opcode;
-	// Buffer interno
-	buffer_t *buffer;
-} paquete_t;
-
 // ============================================================================================================
 //                               ***** Funciones Privadas - Declaraciones *****
 // ============================================================================================================
-
-/**
- * Instancia un paquete.
- *
- * @private
- * @param opcode el código de operacion
- * @param stream el stream a enviarse
- * @returns un nuevo paquete, listo a serializarse
- */
-static paquete_t *paquete_create(opcode_t, char *);
-
-/**
- * Libera memoria de un paquete
- *
- * @private
- * @param paquete el paquete a borrarse
- */
-static void paquete_destroy(paquete_t *);
-
-/**
- * Ordena los bytes de un paquete.
- *
- * @private
- * @param paquete el paquete a serializarse
- * @returns un paquete listo para enviarse
- */
-static void *paquete_serializar(paquete_t *is_paquete);
-
-/**
- * Calcula la cantidad de bytes que necesita un paquete.
- *
- * @private
- * @param paquete el mismísimo paquete
- * @returns los bytes que requiere
- */
-static int paquete_calcular_bytes(paquete_t *);
 
 /**
  * Encapsula los funcionamientos de getaddrinfo
@@ -83,83 +34,6 @@ int direccionar(char *, char *, conexion_t *);
 // ============================================================================================================
 //                               ***** Funciones Privadas - Definiciones *****
 // ============================================================================================================
-
-// -----------------------------------------------------------
-//  Paquete
-// ------------------------------------------------------------
-
-static paquete_t *
-paquete_create(opcode_t iv_opcode, char *iv_stream)
-{
-	// Estructura a Exportar paquete - el nuevo paquete a serializarse
-	paquete_t *es_paquete = malloc(sizeof(paquete_t));
-
-	// Variable Local size - longitud de palabra + '\0'
-	size_t lv_buffer_size = strlen(iv_stream) + 1;
-
-	es_paquete->opcode = iv_opcode;
-	es_paquete->buffer = buffer_create(lv_buffer_size);
-
-	// Copio los bytes del stream al buffer
-	memcpy(es_paquete->buffer->stream, iv_stream, es_paquete->buffer->size);
-
-	return es_paquete;
-}
-
-static paquete_t *
-paquete_stream_create(opcode_t iv_opcode, void *iv_stream, ssize_t stream_size)
-{
-	// Estructura a Exportar paquete - el nuevo paquete a serializarse
-	paquete_t *es_paquete = malloc(sizeof(paquete_t));
-
-	es_paquete->opcode = iv_opcode;
-	es_paquete->buffer = buffer_create(stream_size);
-
-	// Copio los bytes del stream al buffer
-	memcpy(es_paquete->buffer->stream, iv_stream, es_paquete->buffer->size);
-
-	return es_paquete;
-}
-
-static inline void paquete_destroy(paquete_t *is_paquete)
-{
-	buffer_destroy(is_paquete->buffer);
-	free(is_paquete);
-}
-
-static void *paquete_serializar(paquete_t *is_paquete)
-{
-	// Variable Local bytes - the bytes a enviarse
-	int lv_bytes = paquete_calcular_bytes(is_paquete);
-
-	// Exporting paquete - el paquete serializado
-	void *e_paquete = NULL;
-	e_paquete = malloc(lv_bytes);
-
-	// Variable Local offset - el offset del stream
-	int lv_offset = 0;
-
-	// Copio de a bytes, incrementando el offset en todos los casos
-	/**
-	 *          [ OPCODE ][ SIZE del MSG ][ MSG ]
-	 */
-	memcpy(e_paquete + lv_offset, &(is_paquete->opcode), sizeof(int));
-	lv_offset += sizeof(int);
-
-	memcpy(e_paquete + lv_offset, &(is_paquete->buffer->size), sizeof(int));
-	lv_offset += sizeof(int);
-
-	memcpy(e_paquete + lv_offset, is_paquete->buffer->stream, is_paquete->buffer->size);
-	lv_offset += is_paquete->buffer->size;
-
-	return e_paquete;
-}
-
-static int paquete_calcular_bytes(paquete_t *is_paquete)
-{
-	// Bytes del buffer + bytes del opcode + el 'size' de los bytes (cantidad de bytes enviados es un int)
-	return is_paquete->buffer->size + 2 * sizeof(int);
-}
 
 // -----------------------------------------------------------
 //  Misc
@@ -197,17 +71,17 @@ bool tiene_mensaje(char *iv_mensaje)
 ssize_t enviar_str(char *iv_str, int iv_socket)
 {
 	// Estructura Local paquete - el paquete a enviar
-	paquete_t *ls_paquete = paquete_create(MSG, iv_str);
+	package_t *ls_paquete = package_create(MSG, iv_str);
 
 	// Local stream - el paquete serializado, requiere free(1)
-	void *l_stream = paquete_serializar(ls_paquete);
+	void *l_stream = package_serialize(ls_paquete);
 
 	// Variable a Exportar bytes - Los bytes enviados o ERROR (-1)
-	ssize_t ev_bytes = send(iv_socket, l_stream, paquete_calcular_bytes(ls_paquete), 0);
+	ssize_t ev_bytes = send(iv_socket, l_stream, package_get_real_size(ls_paquete), 0);
 
 	free(l_stream);
 
-	paquete_destroy(ls_paquete);
+	package_destroy(ls_paquete);
 
 	return ev_bytes;
 }
@@ -215,17 +89,17 @@ ssize_t enviar_str(char *iv_str, int iv_socket)
 ssize_t enviar_stream(opcode_t opcode, void *iv_str, size_t iv_str_size, int iv_socket)
 {
 	// Estructura Local paquete - el paquete a enviar
-	paquete_t *ls_paquete = paquete_stream_create(opcode, iv_str, iv_str_size);
+	package_t *ls_paquete = new_package_for(opcode, iv_str_size, iv_str);
 
 	// Local stream - el paquete serializado, requiere free(1)
-	void *l_stream = paquete_serializar(ls_paquete);
+	void *l_stream = package_serialize(ls_paquete);
 
 	// Variable a Exportar bytes - Los bytes enviados o ERROR (-1)
-	ssize_t ev_bytes = send(iv_socket, l_stream, paquete_calcular_bytes(ls_paquete), 0);
+	ssize_t ev_bytes = send(iv_socket, l_stream, package_get_real_size(ls_paquete), 0);
 
 	free(l_stream);
 
-	paquete_destroy(ls_paquete);
+	package_destroy(ls_paquete);
 
 	return ev_bytes;
 }
