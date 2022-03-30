@@ -120,7 +120,7 @@ There too many directories! However, it is easy to understand.
 3. `build`: Executables files will be placed here.
 4. `config`: Configuration directory container, all `.cfg` files should be placed in here.
 5. `lib`: Shared library module, for sharing functionalities among modules.
-6. `shard`: All Shared objects (`*.o` files) are stored here.
+6. `shared`: All Shared objects (`*.o` files) are stored here.
 7. `client`: a module implementation example  of the TP0 client.
 8. `server`: a module implementation example of the TP0 server.
 
